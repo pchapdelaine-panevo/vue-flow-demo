@@ -7,7 +7,7 @@ import '../node_modules/@vue-flow/controls/dist/style.css'
 import '../node_modules/@vue-flow/minimap/dist/style.css'
 import '../node_modules/@vue-flow/node-resizer/dist/style.css'
 
-import { createApp } from 'vue'
+import { createApp } from '../node_modules/vue/dist/vue.esm-browser.js'
 import App from './App.vue'
 
 const app = createApp(App)

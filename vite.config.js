@@ -14,12 +14,25 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
+    dedupe: ['vue']
+  },
+  optimizeDeps: {
+    include: ['vue']
   },
   build: {
+    // Enable inlining of dependencies for production builds
+    commonjsOptions: {
+      include: [/node_modules/],
+      transformMixedEsModules: true
+    },
     rollupOptions: {
-      external: [
-        // Add any external dependencies that shouldn't be bundled
-      ]
+      output: {
+        // Ensure modules are properly handled
+        format: 'es',
+        entryFileNames: 'assets/[name].[hash].js',
+        chunkFileNames: 'assets/[name].[hash].js',
+        assetFileNames: 'assets/[name].[hash].[ext]'
+      }
     }
   }
 })
