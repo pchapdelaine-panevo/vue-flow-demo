@@ -12,26 +12,39 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      // Add proper aliases for Vue Flow packages
+      '@vue-flow/core': fileURLToPath(new URL('./node_modules/@vue-flow/core', import.meta.url)),
+      '@vue-flow/controls': fileURLToPath(new URL('./node_modules/@vue-flow/controls', import.meta.url)),
+      '@vue-flow/minimap': fileURLToPath(new URL('./node_modules/@vue-flow/minimap', import.meta.url)),
+      '@vue-flow/node-resizer': fileURLToPath(new URL('./node_modules/@vue-flow/node-resizer', import.meta.url))
     },
     dedupe: ['vue']
   },
+  css: {
+    // Ensure CSS is processed correctly during build
+    postcss: {}, // Add any PostCSS config if needed
+    preprocessorOptions: {}
+  },
   optimizeDeps: {
-    include: ['vue']
+    include: ['vue', '@vue-flow/core', '@vue-flow/controls', '@vue-flow/minimap', '@vue-flow/node-resizer']
   },
   build: {
-    // Enable inlining of dependencies for production builds
-    commonjsOptions: {
-      include: [/node_modules/],
-      transformMixedEsModules: true
-    },
+    // Ensure CSS imports are properly bundled
+    cssCodeSplit: true,
+    // Enable source maps for debugging
+    sourcemap: false,
     rollupOptions: {
       output: {
-        // Ensure modules are properly handled
-        format: 'es',
-        entryFileNames: 'assets/[name].[hash].js',
-        chunkFileNames: 'assets/[name].[hash].js',
-        assetFileNames: 'assets/[name].[hash].[ext]'
+        manualChunks: {
+          'vue-flow': [
+            '@vue-flow/core',
+            '@vue-flow/controls',
+            '@vue-flow/minimap',
+            '@vue-flow/node-resizer'
+          ],
+          'vue': ['vue']
+        }
       }
     }
   }
